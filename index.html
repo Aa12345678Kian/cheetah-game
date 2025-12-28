@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بازی ضربه سکه‌ای</title>
+<style>
+    body { font-family: Tahoma, sans-serif; text-align: center; background: #f0f0f0; }
+    #game-container { margin-top: 50px; position: relative; height: 300px; }
+    .cheetah { width: 180px; cursor: pointer; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    .coin { position: absolute; width: 30px; animation: float 1s ease-out; }
+    @keyframes float {
+        0% { opacity: 1; transform: translateY(0px); }
+        100% { opacity: 0; transform: translateY(-50px); }
+    }
+    #score { font-size: 24px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<h2>🎮 ضربه‌ی سکه‌ای</h2>
+<div id="game-container">
+    <img id="cheetah" class="cheetah" src="" alt="یوزپلنگ">
+</div>
+<div id="score">سکه‌ها: 0 (ضربه‌های امروز: 0/200)</div>
+
+<script>
+const cheetahImages = [
+    "https://i.ibb.co/JHd6yK2/cheetah.png",
+    "https://i.ibb.co/3hShjYx/cheetah2.png",
+    "https://i.ibb.co/WF1KzXY/cheetah3.png"
+];
+
+const maxHits = 200;
+
+// بارگذاری امتیاز از localStorage
+let today = new Date().toISOString().slice(0,10);
+let storedData = JSON.parse(localStorage.getItem("cheetahGame")) || {};
+if(storedData.date !== today) {
+    storedData = {score: 0, hitsToday: 0, date: today};
+}
+let score = storedData.score;
+let hitsToday = storedData.hitsToday;
+
+const scoreDisplay = document.getElementById('score');
+const cheetah = document.getElementById('cheetah');
+
+function updateScore() {
+    scoreDisplay.textContent = سکه‌ها: ${score} (ضربه‌های امروز: ${hitsToday}/${maxHits});
+    localStorage.setItem("cheetahGame", JSON.stringify({score, hitsToday, date: today}));
+}
+
+// انتخاب یوزپلنگ تصادفی
+function randomCheetah() {
+    const index = Math.floor(Math.random() * cheetahImages.length);
+    cheetah.src = cheetahImages[index];
+}
+
+cheetah.addEventListener('click', (e) => {
+    if(hitsToday < maxHits) {
+        score++;
+        hitsToday++;
+        updateScore();
+        createCoin(e.clientX, e.clientY);
+        randomCheetah();
+    } else {
+        alert("⚠️ شما امروز 200 ضربه خود را استفاده کردید! فردا دوباره می‌توانید بازی کنید.");
+    }
+});
+
+// نمایش سکه با انیمیشن
+function createCoin(x, y) {
+    const coin = document.createElement("img");
+    coin.src = "https://i.ibb.co/yq7Z7rB/coin.png"; // تصویر سکه
+    coin.classList.add("coin");
+    coin.style.left = (x - 15) + "px";
+    coin.style.top = (y - 15) + "px";
+    document.body.appendChild(coin);
+    setTimeout(() => { coin.remove(); }, 1000);
+}
+
+// مقداردهی اولیه
+randomCheetah();
+updateScore();
+</script>
+</body>
+</html>
