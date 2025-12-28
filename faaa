@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بازی ضربه سکه‌ای</title>
+<style>
+    body { font-family: Tahoma, sans-serif; text-align: center; background: #f0f0f0; }
+    #game-container { margin-top: 50px; }
+    #cheetah { width: 200px; cursor: pointer; }
+    #score { font-size: 24px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<h2>🎮 ضربه‌ی سکه‌ای</h2>
+<div id="game-container">
+    <img id="cheetah" src="https://i.ibb.co/JHd6yK2/cheetah.png" alt="یوزپلنگ">
+    <div id="score">سکه‌ها: 0</div>
+</div>
+
+<script>
+let score = 0;
+let hitsToday = 0;
+const maxHits = 200;
+
+const cheetah = document.getElementById('cheetah');
+const scoreDisplay = document.getElementById('score');
+
+cheetah.addEventListener('click', () => {
+    if (hitsToday < maxHits) {
+        score++;
+        hitsToday++;
+        scoreDisplay.textContent = سکه‌ها: ${score} (ضربه‌های امروز: ${hitsToday}/${maxHits});
+    } else {
+        alert("⚠️ شما امروز 200 ضربه خود را استفاده کردید! فردا دوباره می‌توانید بازی کنید.");
+    }
+});
+</script>
+</body>
+</html>
